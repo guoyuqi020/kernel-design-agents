@@ -45,7 +45,7 @@ Do not start implementation until the draft exists. A concise draft and executab
 - For a multi-line remote probe, write a script under `scratch/` and pass it in Dev `file_paths`; do not embed the script in the command string. Use `python3` for Python commands.
 - Register and start a Direction with `update-direction` when beginning its research or exploration, not only when editing the Kernel. Follow the shared tool contract for the single in-progress Direction and per-Attempt limits.
 - After every decisive measured keep, restoration, or direction-ending result, call `record-experiment` before another edit. Preserve the exact Kernel/Trial/Result references returned by the tools; separate factual evidence from analysis. Negative results are first-class evidence.
-- Use `wiki-query` for external knowledge and relevant included Skills for research or report analysis. Local Skill knowledge is reference material, not a measurement of the current candidate.
+- Use relevant included Skills and knowledge for research or report analysis. Local Skill knowledge is reference material, not a measurement of the current candidate.
 - Before finishing, deposit reusable search lessons in `memory/`, reference knowledge in `knowledge/`, procedures in `skills/`, scripts in `tools/`, reusable instructions in `prompts/`, and backend hooks in `hooks/`. Update each affected README. If nothing is reusable, explain that decision in the Report analysis.
 
 ## Terminal handoff
