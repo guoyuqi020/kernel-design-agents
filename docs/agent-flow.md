@@ -1,5 +1,7 @@
 # Agent Flow
 
+This is the generic upstream workflow reference. Managed sessions use the configured [phase prompts](../prompts/README.md) and injected workspace contract; the example output paths below are not their workspace contract.
+
 Kernel Design Agents is a repeatable loop for agent-driven implementation work. The loop is useful when a task needs both exploration and evidence-based promotion decisions.
 
 ## Principle

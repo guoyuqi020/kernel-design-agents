@@ -1,33 +1,26 @@
 # Agent Instructions
 
-This repository is the generic Kernel Design Agents workflow reference. It should stay small and task-agnostic.
+Keep reusable Agent methods small and task-agnostic. In a managed task session, the injected phase, workspace, task, and tool contracts define the execution boundary; the rules below describe how to work within it.
 
 ## Repository Rules
 
 - Use English for repository-facing files, comments, documentation, prompts, and commit messages.
-- Keep task-specific prompts, datasets, validators, generated implementations, benchmark logs, and candidate artifacts out of this repository.
-- Treat benchmark competitions, including MLSys-style work, as downstream applications of KDA rather than as the scope of this repository.
-- Put generated outputs in `runs/`, `outputs/`, or `profile/`; these paths are ignored by git.
+- Keep task-specific datasets, validators, benchmark logs, and candidate artifacts out of reusable Agent directories. Candidate implementation belongs in `work/kernel/`.
+- Treat benchmark competitions, including MLSys-style work, as downstream tasks rather than the scope of reusable methods.
+- Put temporary generated outputs, plans, and profile extracts in `scratch/`.
 - Prefer documenting reusable workflow mechanics over documenting one task's private harness or acceptance thresholds.
 
-## Expected Agent Workflow
+## Phase instructions
 
-For a new task:
-
-1. Create or enter a separate implementation workspace.
-2. Define the task objective, constraints, validation command, and promotion criteria.
-3. Use `prompts/basic-flow.md` as the starter prompt.
-4. Read local task code and documentation before proposing implementation changes.
-5. Write the initial plan draft to `docs/draft.md` inside the task workspace.
-6. Convert the draft into an executable plan.
-7. Implement in small iterations, validating each meaningful candidate.
-8. Record candidate relationships, evaluation results, and profiling evidence when applicable.
-9. Keep this repository focused on the reusable flow.
+Follow the supplied phase prompt for planning, implementation, evidence recording, and terminal handoff. Optimization uses `prompts/episode.md`; Bootstrap follows its separately supplied baseline workflow. Work in the prepared workspace and use the supplied task and tool contracts rather than redefining them.
 
 ## Optional Skills
 
 Use external skills only when they are relevant to the active task:
 
-- `humanize` for plan generation and implementation loops.
 - A domain knowledge skill for background research.
 - A profiling or report-analysis skill for performance evidence.
+
+The included `skills/KernelWiki/SKILL.md` and `skills/ncu-report-skill/SKILL.md` provide knowledge and profiling-analysis procedures. Read their instructions as needed. Follow `skills/README.md` for their managed-session paths and execution constraints. Do not install plugins or modify global CLI configuration.
+
+The supplied hardware and DSL override Skill examples, including B200/SM100 assumptions. Skill recipes for local profiling, mandatory profile sets, or output directories must follow the supplied Gateway, measurement-reuse, and workspace contracts instead.

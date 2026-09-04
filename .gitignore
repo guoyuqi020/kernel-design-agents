@@ -6,6 +6,11 @@ profile/
 *.nsys-rep
 *.sqlite
 __pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.DS_Store
 *.py[cod]
 .venv/
 .cache/

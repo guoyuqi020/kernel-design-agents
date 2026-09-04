@@ -1,22 +1,20 @@
-# Prompt Templates
+# Prompts index
 
-This directory stores generic prompts for the Kernel Design Agents workflow.
+This directory stores the Agent's phase prompts and shared tool protocol. In managed sessions it is writable, inherited State; edits affect later fresh sessions, not the current conversation.
 
-The templates are intentionally task-agnostic. Fill in the task objective, constraints, validation command, and promotion criteria before starting an agent session in a separate implementation workspace.
+Whenever you add, change, rename, or remove a prompt, update this README with its path, purpose, and dependencies. Preserve configured phase paths. Keep temporary requests and raw traces in scratch/, not here.
 
 ## Available Templates
 
 | Path | Purpose |
 |---|---|
-| `basic-flow.md` | Minimal prompt for research, planning, implementation, validation, and iteration. |
+| `episode.md` | Executed optimization prompt: basic flow adapted to the supplied task and tool contracts. |
+| `framework_baseline.md` | First correct DSL implementation before optimization begins. |
+| `generalize_agent_problem.md` | Public operator-contract generation, without hidden evaluator cases. |
+| `attempt-tools.md` | Exact CLI, Journal, and terminal Report contracts shared by Bootstrap and Attempts. |
 
 ## How To Use
 
-1. Create or enter the task implementation workspace.
-2. Copy the relevant template content into the agent session.
-3. Replace placeholders with task-specific details.
-4. Ask the agent to read the workspace and write `docs/draft.md`.
-5. Convert that draft into an executable plan.
-6. Run the implementation loop with validation after each meaningful change.
+Managed sessions load the configured phase prompt automatically. `episode.md` is the sole optimization workflow prompt; its plans use `scratch/draft.md` and `scratch/plan.md`.
 
-Task-specific prompts should live with the task they describe. Do not add benchmark-specific datasets, acceptance tables, or private evaluator details to this generic repository.
+Do not add private evaluator details or reconstructed hidden cases to any prompt.
