@@ -11,7 +11,7 @@ Whenever you add, change, rename, or remove a prompt, update this README with it
 | `episode.md` | Executed optimization prompt: basic flow adapted to the supplied task and tool contracts. |
 | `framework_baseline.md` | First correct DSL implementation before optimization begins. |
 | `generalize_agent_problem.md` | Public operator-contract generation, without hidden evaluator cases. |
-| `attempt-tools.md` | Exact CLI, Journal, and terminal Report contracts shared by Bootstrap and Attempts. |
+| `attempt-tools.md` | Exact CLI, Journal, and terminal Report contracts shared by Bootstrap and Attempts, including custom-input and correctness-only evaluation, Evaluate comparisons, and local file-error repair; depends on `src/runtime_tools.py`, `src/tool_contracts.py`, and the trusted Runtime request/report contracts. |
 
 ## How To Use
 

@@ -105,6 +105,18 @@ def test_bootstrap_stays_a_special_attempt() -> None:
     assert "--request scratch/<request>.json" in instructions
 
 
+@pytest.mark.parametrize("phase", (attempt, lineage_bootstrap))
+def test_evaluate_options_reach_managed_session_instructions(phase: Any) -> None:
+    config = AgentConfig.load(ROOT, {})
+    instructions = phase.render_system_prompt(_context(), config)
+    assert "mode=full|correctness_only" in instructions
+    assert "input_py or input_path" in instructions
+    assert "shapes or shapes_path" in instructions
+    assert "without performance measurement or automatic profiling" in instructions
+    assert "requires a successful full evaluation using" in instructions
+    assert "input_scope" in instructions
+
+
 def test_episode_is_the_only_optimization_workflow() -> None:
     config = AgentConfig.load(ROOT, {})
     assert config.prompt_path("optimization_attempt") == ROOT / "prompts/episode.md"
