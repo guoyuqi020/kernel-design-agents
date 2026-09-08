@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+from configparser import ConfigParser
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -113,7 +114,9 @@ def test_evaluate_options_reach_managed_session_instructions(phase: Any) -> None
     assert "input_py or input_path" in instructions
     assert "shapes or shapes_path" in instructions
     assert "without performance measurement or automatic profiling" in instructions
-    assert "requires a successful full evaluation using" in instructions
+    assert "requires a successful ordinary full Evaluate using" in instructions
+    assert 'register `action: "adopt"`' in instructions
+    assert "not an Agent Kernel Trial" in instructions
     assert "input_scope" in instructions
 
 
@@ -136,3 +139,15 @@ def test_managed_instructions_do_not_recommend_humanize() -> None:
         assert "external planning plugin" not in text.lower()
     for path in ("README.md", "skills/README.md"):
         assert "humanize" not in (ROOT / path).read_text().lower()
+
+
+def test_only_the_profiling_skill_is_bundled() -> None:
+    modules = ConfigParser()
+    modules.read(ROOT / ".gitmodules")
+    assert modules.sections() == ['submodule "skills/ncu-report-skill"']
+    assert modules[modules.sections()[0]]["path"] == "skills/ncu-report-skill"
+    assert sorted(
+        path.name for path in (ROOT / "skills").iterdir() if (path / "SKILL.md").is_file()
+    ) == ["ncu-report-skill"]
+    for relative in ("CLAUDE.md", "skills/README.md"):
+        assert "KernelWiki" not in (ROOT / relative).read_text()

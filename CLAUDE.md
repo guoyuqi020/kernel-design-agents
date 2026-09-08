@@ -21,6 +21,6 @@ Use external skills only when they are relevant to the active task:
 - A domain knowledge skill for background research.
 - A profiling or report-analysis skill for performance evidence.
 
-The included `skills/KernelWiki/SKILL.md` and `skills/ncu-report-skill/SKILL.md` provide knowledge and profiling-analysis procedures. Read their instructions as needed. Follow `skills/README.md` for their managed-session paths and execution constraints. Do not install plugins or modify global CLI configuration.
+The included `skills/ncu-report-skill/SKILL.md` provides profiling-analysis procedures. Read its instructions as needed. Follow `skills/README.md` for its managed-session paths and execution constraints. Do not install plugins or modify global CLI configuration.
 
 The supplied hardware and DSL override Skill examples, including B200/SM100 assumptions. Skill recipes for local profiling, mandatory profile sets, or output directories must follow the supplied Gateway, measurement-reuse, and workspace contracts instead.

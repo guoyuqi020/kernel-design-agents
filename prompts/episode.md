@@ -16,7 +16,7 @@ You are working in a task implementation workspace. Your job is to produce the b
 ## Workflow
 
 1. Read the repository structure, existing implementation, tests, and task documentation available in this workspace.
-2. Identify the baseline behavior and the validation path. Recover only relevant history and reuse matching trusted measurements.
+2. Identify the baseline behavior and the validation path. Recover only relevant history and reuse matching trusted measurements. For exact historical source, register an explicit `adopt` decision with real before/after Trial IDs; Runtime validates its successful ordinary full-Evaluate evidence without changing the original Trial's ownership.
 3. Research only the references needed for this task.
 4. Write an implementation-plan draft to `scratch/draft.md`.
 5. Turn the draft into an executable plan before editing code; keep it in `scratch/plan.md`.
@@ -51,3 +51,11 @@ Do not start implementation until the draft exists. A concise draft and executab
 ## Terminal handoff
 
 Build the terminal Report incrementally during experiments. Submit it with `attempt-report` using the shared tool schema; correct validation errors and resubmit when needed. Close every in-progress Direction before a successful handoff. Stop with an evaluated candidate, an exhausted or reverted direction, or a genuine blocker; never invent measurements to finish. Chat text or a local benchmark log does not replace the terminal Report.
+
+An exact restored Kernel may be nominated using a Runtime-accepted `adopt` decision that binds
+matching historical full-Evaluate evidence; do not rerun it just to obtain a new Trial ID.
+Agent ABBA remains exploratory and cannot replace ordinary full-Evaluate evidence. Runtime's
+authoritative ABBA runs only after terminal Report handoff and does not create an Agent Trial;
+do not wait for that later comparison to record an Experiment or submit the Report.
+When no experiment was completed, `blocked` or `pivot` permits zero Experiments and empty Findings.
+Close any `in_progress` Direction with `block` or `defer` first; never fabricate evidence to exit.

@@ -4,4 +4,4 @@ The original Kernel Design Agents workflow and repository materials retain their
 
 Execution code, tests, phase/tool protocol templates, and adaptive-directory indexes were copied and adapted from Atrex Kernel Agent Core (Copyright 2026 Alibaba Group), under Apache License 2.0. The license is preserved in LICENSES/Apache-2.0.txt. Adaptations include managed session entrypoints, per-session Skill/Hook support, and the KDA episode workflow.
 
-Skills are separately versioned submodules and retain their own notices and licenses. They are not relicensed by this integration.
+The included profiling Skill is a separately versioned submodule and retains its own notices and license. It is not relicensed by this integration.
