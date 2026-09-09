@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import shutil
-from configparser import ConfigParser
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
@@ -141,13 +140,11 @@ def test_managed_instructions_do_not_recommend_humanize() -> None:
         assert "humanize" not in (ROOT / path).read_text().lower()
 
 
-def test_only_the_profiling_skill_is_bundled() -> None:
-    modules = ConfigParser()
-    modules.read(ROOT / ".gitmodules")
-    assert modules.sections() == ['submodule "skills/ncu-report-skill"']
-    assert modules[modules.sections()[0]]["path"] == "skills/ncu-report-skill"
-    assert sorted(
-        path.name for path in (ROOT / "skills").iterdir() if (path / "SKILL.md").is_file()
-    ) == ["ncu-report-skill"]
+def test_no_skills_are_bundled_by_default() -> None:
+    assert not (ROOT / ".gitmodules").exists()
+    assert not list((ROOT / "skills").rglob("SKILL.md"))
     for relative in ("CLAUDE.md", "skills/README.md"):
-        assert "KernelWiki" not in (ROOT / relative).read_text()
+        text = (ROOT / relative).read_text()
+        assert "No Skills are bundled by default" in text
+        assert "KernelWiki" not in text
+        assert "ncu-report-skill" not in text

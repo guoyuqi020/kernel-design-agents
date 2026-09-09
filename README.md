@@ -16,16 +16,14 @@ This fork adds an executable Optimizer using the Core execution layer while reta
 | `CLAUDE.md` | Repository-facing agent instructions. |
 
 ## Getting Started
-Initialize this repository and its pinned Skills:
+Clone this repository:
 
 ```bash
-git clone --recurse-submodules git@github.com:guoyuqi020/kernel-design-agents.git
+git clone git@github.com:guoyuqi020/kernel-design-agents.git
 cd kernel-design-agents
-
-git submodule update --init --recursive
 ```
 
-Runtime installs Claude/Codex Skills into the current session's private CLI Home. Do not link these Skills into global CLI configuration for managed runs. The Runtime Python environment supplies execution dependencies; this repository is an Agent Bundle, not a separately installable Python distribution.
+No Skills or nested submodules are bundled by default. Skills added to reusable State remain supported: Runtime installs them into the current Claude/Codex session's private CLI Home. Do not link these Skills into global CLI configuration for managed runs. The Runtime Python environment supplies execution dependencies; this repository is an Agent Bundle, not a separately installable Python distribution.
 
 ## Minimal Flow
 
@@ -54,7 +52,7 @@ workspace/
 ├── prompts/                    # reusable phase prompts and tool instructions
 ├── memory/                     # reusable search experiences, lessons, and decisions
 ├── knowledge/                  # sourced knowledge and reference notes
-├── skills/                     # reusable procedures and included Skill snapshots
+├── skills/                     # reusable procedures; initially only an index
 ├── tools/                      # reusable tool scripts
 ├── hooks/                      # reusable backend hook scripts and definitions
 ├── sessions/                   # Runtime-managed capture and private CLI Home
