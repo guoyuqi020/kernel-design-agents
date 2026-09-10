@@ -66,3 +66,17 @@ The six reusable directories (`prompts/`, `memory/`, `knowledge/`, `skills/`, `t
 Keep temporary profiling output and other one-off files in `scratch/`; these files are not inherited by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, or `sessions/`. Claude/Codex Skills and Hooks are installed into the current session's private CLI Home, not global settings.
 
 Direction and Experiment history and Gateway results live in Runtime storage and are accessed through the supplied tools. Submit the terminal report with `attempt-report`; local `benchmark.csv` or `candidates.jsonl` files are not required handoff artifacts. The repository's engineering `docs/` directory is not a reusable workspace directory—use `knowledge/` for reusable knowledge.
+
+## Claude usage accounting
+
+Native main/child transcripts are captured separately under `sessions/core/provider/`.
+Terminal usage may cover the main session or the entire session tree; accounting includes every
+unique child response once, without adding overlapping native/stdout/terminal totals. A main-only
+terminal records `claude_terminal_usage_excludes_subagents`. Unreconciled counters use the larger
+known native/terminal count per bucket and remain explicitly partial, with
+`claude_response_usage_incomplete_or_unreconciled`; this is not a verified bill.
+`session.json.accounting_usage` preserves accounting quality and cumulative report-completion
+usage, while raw terminal output remains unchanged. Known accounting gaps alone do not cause
+exit 126 or skip report completion. Missing capture, unavailable usage, policy/process failures,
+and quota exhaustion still block completion. Runtime must also support partial accounting reports;
+existing pinned Bundles are not upgraded automatically.
