@@ -204,14 +204,15 @@ def test_prompts_use_only_real_runtime_tool_names() -> None:
     assert "wiki_read" not in text
 
 
-def test_optimizer_prompts_require_discoverable_claude_skill_packages() -> None:
+def test_optimizer_prompts_delegate_skill_curation_to_evolver() -> None:
     episode = (CORE_ROOT / "prompts/episode.md").read_text(encoding="utf-8")
     baseline = (CORE_ROOT / "prompts/framework_baseline.md").read_text(encoding="utf-8")
 
     for text in (episode, baseline):
-        assert "`skills/<skill-name>/SKILL.md`" in text
-        assert "loose `skills/*.md`" in text
-        assert "next fresh Claude session" in text
+        assert "`prompts/`, `insights/`, and `skills/`" in text
+        assert "read-only Agent Revision content" in text
+        assert "writable `tools/`" in text
+        assert "Evolver" in text
 
 
 def test_evaluate_prompt_explains_overrides_and_full_contract_requirement() -> None:

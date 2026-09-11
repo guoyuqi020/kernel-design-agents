@@ -46,7 +46,11 @@ Do not start implementation until the draft exists. A concise draft and executab
 - Register and start a Direction with `update-direction` when beginning its research or exploration, not only when editing the Kernel. Follow the shared tool contract for the single in-progress Direction and per-Attempt limits.
 - After every decisive measured keep, restoration, or direction-ending result, call `record-experiment` before another edit. Supply the exact before/after Kernel Trial IDs; Runtime resolves their Kernel and Result Artifacts. Separate factual evidence from analysis. Negative results are first-class evidence.
 - Use relevant included Skills and references for research or report analysis. Local Skill references are not measurements of the current candidate.
-- Before finishing, deposit only scoped, evidence-derived conclusions that change later search decisions in `insights/`; put procedures in `skills/`, scripts in `tools/`, and reusable instructions in `prompts/`. For Claude discovery, create a procedure as `skills/<skill-name>/SKILL.md` with the exact YAML metadata and package structure required by the injected workspace contract; never use a loose `skills/*.md` file as a Skill. A Skill written now is available only to the next fresh Claude session. Do not copy Journal facts such as Kernel versions, latency, changes, or outcomes into Insights. Every Insight must cite its evidence identities and state its scope, decision effect, contrary evidence, and revisit condition. Update each affected README. If nothing is reusable, explain that decision in the Report analysis.
+- Treat `prompts/`, `insights/`, and `skills/` as read-only Agent Revision content. Use applicable
+  Skills and Insights, but record new hypotheses, evidence, and conclusions in the Runtime Direction
+  and Experiment Journal. Only reusable executable helpers belong in writable `tools/`; update its
+  index whenever a Tool is added, changed, renamed, or removed. Evolver—not this
+  Optimizer session—curates Prompts, Insights, and Skills from completed Session evidence.
 
 ## Terminal handoff
 

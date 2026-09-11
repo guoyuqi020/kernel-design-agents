@@ -23,7 +23,11 @@ git clone git@github.com:guoyuqi020/kernel-design-agents.git
 cd kernel-design-agents
 ```
 
-No Skills or nested submodules are bundled by default. Skills added to reusable State remain supported: Runtime installs them into the current Claude/Codex session's private CLI Home. Do not link these Skills into global CLI configuration for managed runs. The Runtime Python environment supplies execution dependencies; this repository is an Agent Bundle, not a separately installable Python distribution.
+No Skills or nested submodules are bundled by default. Skills published by Evolver remain supported:
+Runtime installs them into the next Claude/Codex session's private CLI Home. Optimizer consumes them
+read-only. Do not link these Skills into global CLI configuration for managed runs. The Runtime Python
+environment supplies execution dependencies; this repository is an Agent Bundle, not a separately
+installable Python distribution.
 
 ## Minimal Flow
 
@@ -49,19 +53,22 @@ workspace/
 │   └── evidence/               # read-only authorized reports and conversations
 ├── agent/optimizer/            # read-only implementation, config, and CLAUDE.md
 ├── work/kernel/                # writable candidate copied from the incumbent
-├── prompts/                    # reusable phase prompts and tool instructions
-├── insights/                   # scoped conclusions that change later search decisions
-├── skills/                     # reusable procedures; initially only an index
-├── tools/                      # reusable tool scripts
+├── prompts/                    # read-only versioned phase prompts and tool instructions
+├── insights/                   # read-only scoped conclusions for search decisions
+├── skills/                     # read-only reusable procedures; initially only an index
+├── tools/                      # writable reusable tool scripts
 ├── sessions/                   # Runtime-managed capture and private CLI Home
 └── scratch/                    # temporary plans, requests, probes, and outputs
     ├── draft.md                # written by the Agent before implementation
     └── plan.md                 # executable plan written by the Agent
 ```
 
-The four reusable directories (`prompts/`, `insights/`, `skills/`, `tools/`) are writable adaptive State. Each contains a `README.md` index that the Agent updates whenever it changes that directory's contents. Runtime selects and restores their starting snapshot according to the configured inheritance policy. Their packaged defaults are omitted from `agent/optimizer/` after State is seeded, so there is only one working copy. Insights contain only scoped, evidence-derived conclusions that change later search decisions; factual history stays in Runtime Journal, and static reference material belongs in a Skill's references.
+The four reusable directories (`prompts/`, `insights/`, `skills/`, `tools/`) form the inherited Agent state. Optimizer and Bootstrap use the first three read-only and may modify only `tools/`, updating its `README.md`. Evolver reviews completed Sessions and authoritative outcomes, then owns versioned changes to Prompts, Insights, and Skills—including promoting mature Tools into Claude Skill packages. Runtime selects and restores each starting snapshot according to the configured inheritance policy. Their packaged defaults are omitted from `agent/optimizer/` after State is seeded, so there is only one working copy.
 
-Keep temporary profiling output and other one-off files in `scratch/`; these files are not inherited by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, or `sessions/`. Claude/Codex Skills are installed into the current session's private CLI Home, not global settings.
+Keep temporary profiling output and other one-off files in `scratch/`; these files are not inherited
+by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, `prompts/`, `insights/`,
+`skills/`, or `sessions/`. Claude/Codex Skills are installed into the current session's private CLI
+Home, not global settings.
 
 Direction and Experiment history and Gateway results live in Runtime storage and are accessed through the supplied tools. Submit the terminal report with `attempt-report`; local `benchmark.csv` or `candidates.jsonl` files are not required handoff artifacts. The repository's engineering `docs/` directory is not reusable State.
 

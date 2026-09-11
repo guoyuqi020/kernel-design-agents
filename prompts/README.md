@@ -1,6 +1,7 @@
 # Prompts index
 
-This directory stores the Agent's phase prompts and shared tool protocol. In managed sessions it is writable, inherited State; edits affect later fresh sessions, not the current conversation.
+This directory stores versioned phase prompts and the shared tool protocol. It is read-only in
+managed Optimizer and Bootstrap sessions; Evolver may revise it for a later Agent Revision.
 
 Whenever you add, change, rename, or remove a prompt, update this README with its path, purpose, and dependencies. Preserve configured phase paths. Keep temporary requests and raw traces in scratch/, not here.
 
