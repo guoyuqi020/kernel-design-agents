@@ -40,7 +40,7 @@ def test_managed_prompt_paths_read_workspace_state(tmp_path: Path) -> None:
 
 
 def test_core_contains_indexed_initial_runtime_state() -> None:
-    for name in ("prompts", "memory", "knowledge", "skills", "tools", "hooks"):
+    for name in ("prompts", "insights", "skills", "tools"):
         readme = (CORE_ROOT / name / "README.md").read_text()
         assert "Whenever you add, change, rename, or remove" in readme
         assert "README" in readme
@@ -202,6 +202,16 @@ def test_prompts_use_only_real_runtime_tool_names() -> None:
     assert "gateway_execute" not in text
     assert "wiki_query" not in text
     assert "wiki_read" not in text
+
+
+def test_optimizer_prompts_require_discoverable_claude_skill_packages() -> None:
+    episode = (CORE_ROOT / "prompts/episode.md").read_text(encoding="utf-8")
+    baseline = (CORE_ROOT / "prompts/framework_baseline.md").read_text(encoding="utf-8")
+
+    for text in (episode, baseline):
+        assert "`skills/<skill-name>/SKILL.md`" in text
+        assert "loose `skills/*.md`" in text
+        assert "next fresh Claude session" in text
 
 
 def test_evaluate_prompt_explains_overrides_and_full_contract_requirement() -> None:

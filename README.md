@@ -50,22 +50,20 @@ workspace/
 ├── agent/optimizer/            # read-only implementation, config, and CLAUDE.md
 ├── work/kernel/                # writable candidate copied from the incumbent
 ├── prompts/                    # reusable phase prompts and tool instructions
-├── memory/                     # reusable search experiences, lessons, and decisions
-├── knowledge/                  # sourced knowledge and reference notes
+├── insights/                   # scoped conclusions that change later search decisions
 ├── skills/                     # reusable procedures; initially only an index
 ├── tools/                      # reusable tool scripts
-├── hooks/                      # reusable backend hook scripts and definitions
 ├── sessions/                   # Runtime-managed capture and private CLI Home
 └── scratch/                    # temporary plans, requests, probes, and outputs
     ├── draft.md                # written by the Agent before implementation
     └── plan.md                 # executable plan written by the Agent
 ```
 
-The six reusable directories (`prompts/`, `memory/`, `knowledge/`, `skills/`, `tools/`, `hooks/`) are writable adaptive State. Each contains a `README.md` index that the Agent updates whenever it changes that directory's contents. Runtime selects and restores their starting snapshot according to the configured inheritance policy. Their packaged defaults are omitted from `agent/optimizer/` after State is seeded, so there is only one working copy.
+The four reusable directories (`prompts/`, `insights/`, `skills/`, `tools/`) are writable adaptive State. Each contains a `README.md` index that the Agent updates whenever it changes that directory's contents. Runtime selects and restores their starting snapshot according to the configured inheritance policy. Their packaged defaults are omitted from `agent/optimizer/` after State is seeded, so there is only one working copy. Insights contain only scoped, evidence-derived conclusions that change later search decisions; factual history stays in Runtime Journal, and static reference material belongs in a Skill's references.
 
-Keep temporary profiling output and other one-off files in `scratch/`; these files are not inherited by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, or `sessions/`. Claude/Codex Skills and Hooks are installed into the current session's private CLI Home, not global settings.
+Keep temporary profiling output and other one-off files in `scratch/`; these files are not inherited by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, or `sessions/`. Claude/Codex Skills are installed into the current session's private CLI Home, not global settings.
 
-Direction and Experiment history and Gateway results live in Runtime storage and are accessed through the supplied tools. Submit the terminal report with `attempt-report`; local `benchmark.csv` or `candidates.jsonl` files are not required handoff artifacts. The repository's engineering `docs/` directory is not a reusable workspace directory—use `knowledge/` for reusable knowledge.
+Direction and Experiment history and Gateway results live in Runtime storage and are accessed through the supplied tools. Submit the terminal report with `attempt-report`; local `benchmark.csv` or `candidates.jsonl` files are not required handoff artifacts. The repository's engineering `docs/` directory is not reusable State.
 
 ## Claude usage accounting
 
