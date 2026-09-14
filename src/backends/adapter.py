@@ -239,6 +239,11 @@ class ClaudeLikeAdapter(AgentBackendAdapter):
                     )
                     sequence += 1
                 continue
+            # System task_progress/task_notification usage is a cumulative task
+            # counter, not a provider response. Counting it as a message produces
+            # an unidentifiable stream-only delta and makes native usage reconciliation fail.
+            if event_type != "assistant":
+                continue
             usage: object = event.get("usage")
             message = event.get("message")
             if usage is None and isinstance(message, Mapping):

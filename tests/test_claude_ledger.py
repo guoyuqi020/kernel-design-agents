@@ -139,6 +139,49 @@ def test_main_only_terminal_includes_children_in_accounting_once(tmp_path: Path)
     assert events[0].usage == terminal
 
 
+def test_subagent_progress_counters_are_not_response_usage(tmp_path: Path) -> None:
+    observer, path = ledger(tmp_path)
+    path.write_text(message())
+    child = path.with_suffix("") / "subagents/agent-child.jsonl"
+    child.parent.mkdir(parents=True)
+    child.write_text(message("child"))
+    terminal = json.loads(message())["message"]["usage"]
+    stdout = (
+        message()
+        + "".join(
+            json.dumps(
+                {
+                    "type": "system",
+                    "subtype": subtype,
+                    "task_id": "agent-child",
+                    "usage": {"total_tokens": total, "tool_uses": index},
+                }
+            )
+            + "\n"
+            for index, (subtype, total) in enumerate(
+                (("task_progress", 20), ("task_progress", 40), ("task_notification", 40)),
+                start=1,
+            )
+        )
+        + json.dumps({"type": "result", "usage": terminal})
+        + "\n"
+    )
+
+    stream, terminal_usage = ClaudeAdapter().normalize_stream(stdout)
+    assert [event.kind for event in stream] == ["usage_delta", "terminal_usage"]
+    assert stream[0].message_id == "m1"
+    budget = TokenBudgetObserver(ClaudeAdapter(), 100)
+    assert all(not budget.on_stdout_line(line) for line in stdout.splitlines())
+    assert not budget.exhausted
+    events, actual, complete, errors = observe_claude_usage(
+        observer.capture(), stream, terminal_usage
+    )
+    assert complete
+    assert errors == (CLAUDE_MAIN_ONLY_USAGE,)
+    assert actual.total_tokens == 80
+    assert {event.message_id for event in events[:-1]} == {"m1", "child"}
+
+
 def test_stalled_terminal_uses_native_counts_as_partial_accounting(tmp_path: Path) -> None:
     observer, path = ledger(tmp_path)
     path.write_text(message(output=611_806, cached=42_600_000))
