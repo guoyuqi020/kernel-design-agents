@@ -115,7 +115,7 @@ def test_evaluate_options_reach_managed_session_instructions(phase: Any) -> None
     assert "without performance measurement or automatic profiling" in instructions
     assert "requires a successful ordinary full Evaluate using" in instructions
     assert 'register `action: "adopt"`' in instructions
-    assert "not an Agent Kernel Trial" in instructions
+    assert "not an Agent Result Artifact" in instructions
     assert "input_scope" in instructions
 
 
