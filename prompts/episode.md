@@ -61,5 +61,13 @@ matching historical full-Evaluate evidence; do not rerun it just to obtain a new
 Agent ABBA remains exploratory and cannot replace ordinary full-Evaluate evidence. Runtime's
 authoritative ABBA runs only after terminal Report handoff and does not create an Agent Trial;
 do not wait for that later comparison to record an Experiment or submit the Report.
-When no experiment was completed, `blocked` or `pivot` permits zero Experiments and empty Findings.
-Close any `in_progress` Direction with `block` or `defer` first; never fabricate evidence to exit.
+`blocked` or `pivot` permits zero Experiments and empty Findings if no Direction needs closing.
+Before `block` or `defer`, record an associated Experiment; if no measurement was possible, record
+record the actual investigation or blocker with `abandon_direction`, citing a real Kernel-bound
+Gateway Result in at least one of `before` and `after`. Both cannot be null; no Result means the
+closure remains blocked, not permission to manufacture evidence.
+At closure, explicitly select relevant `supporting_experiment_ids` and declare
+`hypothesis_status` as `unresolved`, `supported`, or `refuted`. Lifecycle is not a verdict:
+untested reasoning stays unresolved. Preserve this distinction in Findings, memory, and Skills;
+never promote incidental interpretations in unrelated Experiments into established constraints.
+Never fabricate evidence to exit.
