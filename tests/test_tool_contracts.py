@@ -61,14 +61,12 @@ def test_suggested_direction_adoption_uses_ordinary_ancestry() -> None:
     assert _validate_direction_events([event], "journal") == [event]
 
 
-def test_bootstrap_can_suggest_but_optimizer_schema_cannot() -> None:
+def test_bootstrap_and_optimizer_schemas_cannot_create_suggestions() -> None:
     optimizer = tool_request_schema("update-direction")
     bootstrap = tool_request_schema("update-direction", allow_baseline=True)
     assert optimizer is not None and bootstrap is not None
     assert optimizer["oneOf"][0]["properties"]["action"] == {"const": "propose"}
-    assert bootstrap["oneOf"][0]["properties"]["action"] == {
-        "enum": ["propose", "suggest"]
-    }
+    assert bootstrap["oneOf"][0]["properties"]["action"] == {"const": "propose"}
     event = {
         "direction_id": "direction_" + "a" * 32,
         "direction_event_id": "directionevent_" + "b" * 32,
@@ -83,8 +81,7 @@ def test_bootstrap_can_suggest_but_optimizer_schema_cannot() -> None:
         "analysis": None,
         "supporting_experiment_ids": [],
     }
-    assert _validate_direction_events([event], "journal", allow_suggest=True) == [event]
-    with pytest.raises(ValueError, match="only during Bootstrap"):
+    with pytest.raises(ValueError, match="no longer supported"):
         _validate_direction_events([event], "journal")
 
 
