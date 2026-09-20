@@ -17,8 +17,11 @@ alternative arm implementations are not included in the Bundle or shown to Evolv
 control instances have independent Lineage-local Agent Revision identities even when Runtime
 materializes the same initial program.
 
-Every organization must spend `limits.optimizer_attempts` exactly. A program may change topology,
-but it cannot mint additional Attempts.
+`limits.optimizer_attempts` is a hard capacity, not permission to mint work. Normal multi-Branch
+organizations must spend it exactly. Runtime also supports controlled Challenger-only evolution
+topologies such as Isolated-Evolve and Retained-Evolve: the Active Branch is omitted, the sole
+Challenger spends the exact configured single-Branch budget, and no same-Epoch Agent comparison is
+performed.
 
 The public SDK intentionally hides Attempt ordinals and the JSONL wire protocol. Use `create_pool`
 to define a Branch's Trajectory count, number of rounds, and State policy, then call `run_pools`.
