@@ -14,6 +14,7 @@ This fork adds an executable Optimizer using the Core execution layer while reta
 | `prompts/README.md` | How to use prompt templates. |
 | `prompts/episode.md` | Optimization workflow, adapted from KDA's original basic flow. |
 | `CLAUDE.md` | Repository-facing agent instructions. |
+| `workflow/` | Agent-owned Epoch orchestration programs and bounded Runtime-service client; each Lineage freezes its selected program in `agent-v0`. |
 
 ## Getting Started
 Clone this repository:
