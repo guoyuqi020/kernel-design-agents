@@ -13,6 +13,15 @@ from backends import DEFAULT_BACKEND_REGISTRY
 from sessions import attempt, lineage_bootstrap
 
 ROOT = Path(__file__).resolve().parents[1]
+CORRECTNESS_POLICY = {
+    "comparison": "elementwise",
+    "formula": "abs(candidate - reference) <= atol + rtol * abs(reference)",
+    "default_tolerance": {"atol": 0.06, "rtol": 0.04},
+    "output_tolerances": {
+        "output": {"atol": 0.06, "rtol": 0.04},
+        "mutated_inputs.out": {"atol": 0.06, "rtol": 0.04},
+    },
+}
 
 
 def _context() -> Any:
@@ -31,6 +40,7 @@ def _context() -> Any:
         },
         agent_problem={"objective": "Add two vectors", "shape_domain": {"size": 1024}},
         evidence_prompt="## Prepared workspace\nRead prior evidence through the supplied tools.",
+        correctness_policy=CORRECTNESS_POLICY,
     )
 
 
@@ -52,6 +62,8 @@ def test_episode_keeps_basic_flow_without_unfilled_contract() -> None:
     assert "scratch/draft.md" in prompt
     assert '"dsl": "triton"' in prompt
     assert '"hardware_target": "sm_120"' in prompt
+    assert '"atol": 0.06' in prompt
+    assert '"mutated_inputs.out"' in prompt
     assert "update-direction" in prompt
     assert "record-experiment" in prompt
     assert "attempt-report" in prompt
@@ -117,6 +129,8 @@ def test_evaluate_options_reach_managed_session_instructions(phase: Any) -> None
     assert 'register `action: "adopt"`' in instructions
     assert "not an Agent Result Artifact" in instructions
     assert "input_scope" in instructions
+    assert "task-specific `correctness_policy`" in instructions
+    assert "atol=0.01" not in instructions
 
 
 def test_episode_is_the_only_optimization_workflow() -> None:
