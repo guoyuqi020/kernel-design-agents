@@ -40,7 +40,7 @@ def test_managed_prompt_paths_read_workspace_state(tmp_path: Path) -> None:
 
 
 def test_core_contains_indexed_initial_runtime_state() -> None:
-    for name in ("prompts", "insights", "skills", "tools"):
+    for name in ("prompts", "skills", "tools"):
         readme = (CORE_ROOT / name / "README.md").read_text()
         assert "Whenever you add, change, rename, or remove" in readme
         assert "README" in readme
@@ -209,7 +209,7 @@ def test_optimizer_prompts_delegate_skill_curation_to_evolver() -> None:
     baseline = (CORE_ROOT / "prompts/framework_baseline.md").read_text(encoding="utf-8")
 
     for text in (episode, baseline):
-        assert "`prompts/`, `insights/`, and `skills/`" in text
+        assert "`prompts/` and `skills/`" in text
         assert "read-only Agent Revision content" in text
         assert "writable `tools/`" in text
         assert "Evolver" in text
@@ -260,9 +260,12 @@ def test_attempt_tool_example_uses_the_trusted_lineage_dsl() -> None:
     instructions = _tool_instructions(config, "triton")
 
     assert "## Session tools (triton)" in instructions
-    assert "1 MiB (1,048,576 bytes), including whitespace" in instructions
-    assert "input generator (at most 128 KiB)" in instructions
-    assert "Agate Shape records (at most 256 KiB)" in instructions
+    assert "runtime-contract --output scratch/runtime-contract.json" in instructions
+    assert "source of truth for request schemas" in instructions
+    assert "do not guess fields, defaults, limits" in instructions
+    assert "1 MiB (1,048,576 bytes), including whitespace" not in instructions
+    assert "at most 128 KiB" not in instructions
+    assert "at most 256 KiB" not in instructions
     assert "wiki-read" not in instructions
     assert "wiki-query" not in instructions
     assert "CUDA vectorized load requirements" not in instructions

@@ -46,11 +46,12 @@ Do not start implementation until the draft exists. A concise draft and executab
 - Register and start a Direction with `update-direction` when beginning its research or exploration, not only when editing the Kernel. Follow the shared tool contract for the single in-progress Direction and per-Attempt limits.
 - After every decisive measured keep, restoration, or direction-ending result, call `record-experiment` before another edit. Supply the exact before/after Result Artifact digests; Runtime resolves their Kernel and Result Artifacts. Separate factual evidence from analysis. Negative results are first-class evidence.
 - Use relevant included Skills and references for research or report analysis. Local Skill references are not measurements of the current candidate.
-- Treat `prompts/`, `insights/`, and `skills/` as read-only Agent Revision content. Use applicable
-  Skills and Insights, but record new hypotheses, evidence, and conclusions in the Runtime Direction
+- Treat `prompts/` and `skills/` as read-only Agent Revision content. Use applicable Skills, but
+  record task-specific hypotheses, evidence, and conclusions in the Runtime Direction
   and Experiment Journal. Only reusable executable helpers belong in writable `tools/`; update its
   index whenever a Tool is added, changed, renamed, or removed. Evolver—not this
-  Optimizer session—curates Prompts, Insights, and Skills from completed Session evidence.
+  Optimizer session—may curate only task-independent Prompts, Skills, and Tools from completed
+  Session evidence. It does not choose Kernel optimization directions.
 
 ## Terminal handoff
 

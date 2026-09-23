@@ -121,9 +121,9 @@ def test_bootstrap_stays_a_special_attempt() -> None:
 def test_evaluate_options_reach_managed_session_instructions(phase: Any) -> None:
     config = AgentConfig.load(ROOT, {})
     instructions = phase.render_system_prompt(_context(), config)
-    assert "mode=full|correctness_only" in instructions
-    assert "input_py or input_path" in instructions
-    assert "shapes or shapes_path" in instructions
+    assert "runtime-contract --tool gateway-execute --operation evaluate" in instructions
+    assert "source of truth for request schemas" in instructions
+    assert "do not guess fields, defaults, limits" in instructions
     assert "without performance measurement or automatic profiling" in instructions
     assert "requires a successful ordinary full Evaluate using" in instructions
     assert 'register `action: "adopt"`' in instructions

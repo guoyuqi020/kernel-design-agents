@@ -23,10 +23,12 @@ topologies such as Isolated-Evolve and Retained-Evolve: the Active Branch is omi
 Challenger spends the exact configured single-Branch budget, and no same-Epoch Agent comparison is
 performed.
 
-The public SDK intentionally hides Attempt ordinals and the JSONL wire protocol. Use `create_pool`
-to define a Branch's Trajectory count, number of rounds, and State policy, then call `run_pools`.
-An optional `after_round` callback can inspect normalized outcomes and call `route_kernel` or
-`route_state` for the next round. The private SDK layer deterministically translates each logical
-round into replay-safe Attempt identities, so a Workflow restart replays completed rounds without
-duplicating work. Runtime validates every route and remains responsible for execution, evaluation,
-recovery, gates, persistence, selection, and cross-Epoch scheduling.
+The public SDK intentionally hides Attempt identities and the JSONL wire protocol. Use `create_pool`
+to define a Branch's Trajectory count and number of rounds, then call `run_pools`. Every round starts
+from each Trajectory's immutable initial State unless Workflow explicitly routes a completed
+Attempt's `output_state` into that Trajectory's next round. Thus reset, retention, broadcast, and
+conditional State flow are Workflow code rather than Runtime policy flags. An optional
+`after_round` callback can inspect normalized outcomes and call `route_kernel` or `route_state`.
+The private SDK deterministically translates each logical round into replay-safe Attempt identities,
+while Runtime validates every State reference and remains responsible for materialization,
+execution, evaluation, recovery, gates, persistence, selection, and cross-Epoch scheduling.

@@ -55,7 +55,6 @@ workspace/
 ├── agent/optimizer/            # read-only implementation, config, and CLAUDE.md
 ├── work/kernel/                # writable candidate copied from the incumbent
 ├── prompts/                    # read-only versioned phase prompts and tool instructions
-├── insights/                   # read-only scoped conclusions for search decisions
 ├── skills/                     # read-only reusable procedures; initially only an index
 ├── tools/                      # writable reusable tool scripts
 ├── sessions/                   # Runtime-managed capture and private CLI Home
@@ -64,10 +63,10 @@ workspace/
     └── plan.md                 # executable plan written by the Agent
 ```
 
-The four reusable directories (`prompts/`, `insights/`, `skills/`, `tools/`) form the inherited Agent state. Optimizer and Bootstrap use the first three read-only and may modify only `tools/`, updating its `README.md`. Evolver reviews completed Sessions and authoritative outcomes, then owns versioned changes to Prompts, Insights, and Skills—including promoting mature Tools into Claude Skill packages. Runtime selects and restores each starting snapshot according to the configured inheritance policy. Their packaged defaults are omitted from `agent/optimizer/` after State is seeded, so there is only one working copy.
+The three reusable directories (`prompts/`, `skills/`, `tools/`) form the inherited Agent state. Optimizer and Bootstrap use Prompts and Skills read-only and may modify only `tools/`, updating its `README.md`. Evolver reviews completed Sessions and authoritative outcomes, then may make task-independent changes to Prompts, Skills, Tools, implementation, or Workflow—including promoting mature Tools into Claude Skill packages. Task-specific Kernel directions and conclusions remain in Runtime Journals and Reports. Runtime selects and restores each starting snapshot according to the configured inheritance policy. Their packaged defaults are omitted from `agent/optimizer/` after State is seeded, so there is only one working copy.
 
 Keep temporary profiling output and other one-off files in `scratch/`; these files are not inherited
-by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, `prompts/`, `insights/`,
+by later sessions or retries. Do not modify `input/`, `agent/optimizer/`, `prompts/`,
 `skills/`, or `sessions/`. Claude/Codex Skills are installed into the current session's private CLI
 Home, not global settings.
 
