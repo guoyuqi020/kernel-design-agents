@@ -9,7 +9,7 @@ You are working in a task implementation workspace. Your job is to produce the b
 - Correctness requirements: the public semantics, ABI, tolerances, and invariants; exact evaluation cases remain private.
 - Performance or quality target: improve measured performance across the evaluation domain, not a reconstructed hidden case table.
 - Allowed implementation approaches: the injected DSL is binding; do not introduce another DSL or a fallback implementation.
-- Validation command: save `{"operation":"evaluate"}` to `scratch/evaluate.json`, then run `python3 agent/optimizer/src/runtime_tools.py gateway-execute --request scratch/evaluate.json`.
+- Validation command: save `{"operation":"evaluate","latency_prediction":"retained"}` to `scratch/evaluate.json` (replace the prediction with your actual expectation), then run `python3 agent/optimizer/src/runtime_tools.py gateway-execute --request scratch/evaluate.json`.
 - Evaluation command: the same full Evaluate measures correctness and performance for the exact current `work/kernel/` tree. Check and Dev are diagnostic probes, not final validation.
 - Promotion criteria: nominate a correctly evaluated candidate with credible evidence; the controller applies retention and promotion policy, not the Agent's conclusion.
 
