@@ -29,6 +29,8 @@ from each Trajectory's immutable initial State unless Workflow explicitly routes
 Attempt's `output_state` into that Trajectory's next round. Thus reset, retention, broadcast, and
 conditional State flow are Workflow code rather than Runtime policy flags. An optional
 `after_round` callback can inspect normalized outcomes and call `route_kernel` or `route_state`.
+`best_accepted_kernel(pool)` selects the lowest-latency accepted Kernel from every completed
+round of that Pool in the current Epoch; `outcomes(pool)` contains only the current round.
 The private SDK deterministically translates each logical round into replay-safe Attempt identities,
 while Runtime validates every State reference and remains responsible for materialization,
 execution, evaluation, recovery, gates, persistence, selection, and cross-Epoch scheduling.
