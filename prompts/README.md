@@ -12,7 +12,7 @@ Whenever you add, change, rename, or remove a prompt, update this README with it
 | `episode.md` | Executed optimization prompt, including explicit adoption of matching historical evidence; depends on the shared Session tools and trusted Runtime Journal/evaluation contract. |
 | `framework_baseline.md` | First correct DSL implementation and honest blocked handoff without fabricated experiments; depends on the shared Report schema and Runtime Bootstrap validation. |
 | `generalize_agent_problem.md` | Public operator-contract generation, without hidden evaluator cases. |
-| `attempt-tools.md` | Exact CLI, Journal, and terminal Report contracts shared by Bootstrap and Attempts, including the 1 MiB request limit, paired input/Shape examples, exploratory versus authoritative ABBA, historical `adopt` decisions, zero-experiment blocked/pivot reports, and local file-error repair; depends on `src/runtime_tools.py`, `src/tool_contracts.py`, and the trusted Runtime request/report contracts. |
+| `attempt-tools.md` | Exact CLI, Journal, and terminal Report contracts shared by Bootstrap and Attempts, including the 1 MiB request limit, paired input/Shape examples, exploratory versus authoritative ABBA, historical `adopt` decisions, zero-experiment blocked/pivot reports, operation selection, targeted history recovery, and local file-error repair; depends on `src/runtime_tools.py`, `src/tool_contracts.py`, and the trusted Runtime request/report contracts. |
 
 ## How To Use
 

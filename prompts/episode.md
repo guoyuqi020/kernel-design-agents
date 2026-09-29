@@ -63,8 +63,8 @@ Agent ABBA remains exploratory and cannot replace ordinary full-Evaluate evidenc
 authoritative ABBA runs only after terminal Report handoff and does not create an Agent Trial;
 do not wait for that later comparison to record an Experiment or submit the Report.
 `blocked` or `pivot` permits zero Experiments and empty Findings if no Direction needs closing.
-Before `block` or `defer`, record an associated Experiment; if no measurement was possible, record
-record the actual investigation or blocker with `abandon_direction`, citing a real Kernel-bound
+Before `block` or `defer`, record an associated Experiment; if no performance measurement was possible, record
+the actual investigation or blocker with `abandon_direction`, citing a real Kernel-bound
 Gateway Result in at least one of `before` and `after`. Both cannot be null; no Result means the
 closure remains blocked, not permission to manufacture evidence.
 At closure, explicitly select relevant `supporting_experiment_ids` and declare
