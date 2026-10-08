@@ -162,6 +162,52 @@ def test_missing_queries_runtime_with_fresh_authenticated_keys_and_report_only_p
     assert not context.report_path.exists()
 
 
+@pytest.mark.parametrize(
+    "modules",
+    [frozenset(), frozenset({"directions"}), frozenset({"experiments"})],
+)
+def test_missing_report_scopes_historical_reuse_to_enabled_modules(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, modules: frozenset[str]
+) -> None:
+    completion = importlib.import_module("sessions.report_completion")
+    monkeypatch.setattr(completion, "active_modules", lambda: modules)
+    context = _context(tmp_path)
+    _http(monkeypatch, {"result": {"status": "missing"}})
+    prompt = report_completion_prompt(context, 30.0)
+    assert prompt is not None
+    assert "do not edit the candidate or start new measurements" in prompt
+    assert ("record an adopt Experiment" in prompt) == ("experiments" in modules)
+    assert ("Runtime can automatically reuse" in prompt) == ("experiments" not in modules)
+    if "experiments" not in modules:
+        assert "without an Experiment or duplicate Evaluate" in prompt
+        assert "a failed current full Evaluate cannot be overridden" in prompt
+        assert "Keep the required findings and enabled Direction bookkeeping" in prompt
+
+
+@pytest.mark.parametrize("bootstrap", [False, True])
+def test_missing_report_allows_unmeasured_direction_closure_without_experiment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, bootstrap: bool
+) -> None:
+    completion = importlib.import_module("sessions.report_completion")
+    monkeypatch.setattr(
+        completion, "active_modules", lambda: frozenset({"directions", "experiments"})
+    )
+    context = _context(tmp_path, bootstrap=bootstrap)
+    _http(monkeypatch, {"result": {"status": "missing"}})
+
+    prompt = report_completion_prompt(context, 30.0)
+
+    assert prompt is not None
+    assert "Do not start new optimization" in prompt
+    assert "including when unmeasured Directions need closing" in prompt
+    assert "hypothesis_status=unresolved" in prompt
+    assert "supporting_experiment_ids=[]" in prompt
+    assert "supporting_results=[]" in prompt
+    assert "No Experiment is required merely to close a Direction" in prompt
+    assert "requires an associated Experiment first" not in prompt
+    assert "Close only in_progress(self) Directions, leaving others' work open" in prompt
+
+
 @pytest.mark.parametrize("local_bytes", [b'{"status":"blocked"}\n', b"unaccepted malformed draft"])
 def test_missing_preserves_local_drafts_under_unique_backup_names(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, local_bytes: bytes

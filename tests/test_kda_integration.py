@@ -52,9 +52,12 @@ def test_episode_keeps_basic_flow_without_unfilled_contract() -> None:
         "Research only the references needed for this task.",
         "Implement one candidate at a time.",
         "Keep the final change scoped to the task contract.",
-        "The main risks and unknowns.",
-        "Candidate implementation directions ranked by expected value and risk.",
+        "The main risks and unknowns, and the last viable candidate to restore.",
+        "The next concrete edit or focused probe.",
         "Do not start implementation until the draft exists.",
+        "Once a step is actionable, write the change or run the focused probe",
+        "smallest end-to-end implementation",
+        "do not restart the entire design without new evidence",
     ):
         assert sentence in prompt
     assert "<fill in" not in prompt

@@ -27,16 +27,20 @@ You are working in a task implementation workspace. Your job is to produce the b
 
 ## Plan Draft Requirements
 
-The draft in `scratch/draft.md` should include:
+Keep the draft in `scratch/draft.md` brief:
 
-- The current baseline and how it is validated.
-- The main risks and unknowns.
-- Candidate implementation directions ranked by expected value and risk.
-- The first concrete implementation steps.
-- The exact validation and evaluation commands to run.
-- The evidence required to promote, revise, or reject a candidate.
+- The chosen change and expected effect, separating baseline facts from assumptions.
+- The main risks and unknowns, and the last viable candidate to restore.
+- The next concrete edit or focused probe.
+- The next validation command and evidence that would support or reject the change.
 
 Do not start implementation until the draft exists. A concise draft and executable plan are sufficient.
+Once a step is actionable, write the change or run the focused probe instead of expanding the
+entire design. For a complex rewrite, first save the smallest end-to-end implementation that can
+be checked against the public contract, then add optimizations incrementally. Do not wait to
+resolve every layout, pipeline, and boundary question before the first implementation or probe.
+Keep `scratch/plan.md` current with the next step. After an interruption, inspect the saved source
+and plan and continue from them; do not restart the entire design without new evidence.
 
 ## Execution and evidence
 
@@ -62,13 +66,11 @@ matching historical full-Evaluate evidence; do not rerun it just to obtain a new
 Agent ABBA remains exploratory and cannot replace ordinary full-Evaluate evidence. Runtime's
 authoritative ABBA runs only after terminal Report handoff and does not create an Agent Trial;
 do not wait for that later comparison to record an Experiment or submit the Report.
-`blocked` or `pivot` permits zero Experiments and empty Findings if no Direction needs closing.
-Before `block` or `defer`, record an associated Experiment; if no performance measurement was possible, record
-the actual investigation or blocker with `abandon_direction`, citing a real Kernel-bound
-Gateway Result in at least one of `before` and `after`. Both cannot be null; no Result means the
-closure remains blocked, not permission to manufacture evidence.
-At closure, explicitly select relevant `supporting_experiment_ids` and declare
-`hypothesis_status` as `unresolved`, `supported`, or `refuted`. Lifecycle is not a verdict:
+`blocked` or `pivot` may have zero Experiments and empty Findings. Before handoff, close
+started Directions with an honest stopping reason and `hypothesis_status`; unmeasured or inconclusive
+work can close `unresolved` with empty support, even without a Gateway call. Select relevant
+Experiment IDs or direct `supporting_results` only when evidence exists. No diagnostic call or
+fabricated record is required to finish. Lifecycle is not a verdict:
 untested reasoning stays unresolved. Preserve this distinction in Findings, memory, and Skills;
 never promote incidental interpretations in unrelated Experiments into established constraints.
 Never fabricate evidence to exit.
