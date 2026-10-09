@@ -440,7 +440,7 @@ def _runtime_owned_journals(monkeypatch: pytest.MonkeyPatch) -> None:
                     "Direction ID is outside the current Attempt's visible history"
                 ) from error
         if command == "record-experiment":
-            if set(request) != runtime_tools._EXPERIMENT_FIELDS:
+            if set(request) - {"knowledge_used"} != runtime_tools._EXPERIMENT_FIELDS:
                 raise ValueError(
                     f"Experiment fields must be exactly {sorted(runtime_tools._EXPERIMENT_FIELDS)}"
                 )
@@ -489,6 +489,7 @@ def _runtime_owned_journals(monkeypatch: pytest.MonkeyPatch) -> None:
                         "evidence": value["evidence"],
                         "analysis": value["analysis"],
                         "action": value["action"],
+                        "knowledge_used": value.get("knowledge_used", []),
                     }
                     for value in _fake_visible(context, "experiments")
                 ]
@@ -1363,6 +1364,7 @@ def test_experiment_journal_can_be_listed_and_loaded_by_id(
                 "evidence": "evaluation result sha256:example",
                 "analysis": "the hypothesis held because latency improved",
                 "action": "keep_after",
+                "knowledge_used": [],
             },
             {
                 "experiment_id": first["experiment_id"],
@@ -1372,6 +1374,7 @@ def test_experiment_journal_can_be_listed_and_loaded_by_id(
                 "evidence": "evaluation result sha256:example",
                 "analysis": "the hypothesis held because latency improved",
                 "action": "keep_after",
+                "knowledge_used": [],
             },
             {
                 "experiment_id": second["experiment_id"],
@@ -1381,6 +1384,7 @@ def test_experiment_journal_can_be_listed_and_loaded_by_id(
                 "evidence": "evaluation result sha256:example",
                 "analysis": "the hypothesis held because latency improved",
                 "action": "restore_before",
+                "knowledge_used": [],
             },
         ]
     }
@@ -1395,7 +1399,8 @@ def test_experiment_journal_can_be_listed_and_loaded_by_id(
     assert loaded["action"] == "restore_before"
     historical = load_experiment(context, {"experiment_id": historical_id})
     assert historical == {
-        key: value for key, value in historical_experiment.items() if key != "sequence"
+        **{key: value for key, value in historical_experiment.items() if key != "sequence"},
+        "knowledge_used": [],
     }
 
 
@@ -2050,7 +2055,7 @@ def test_wiki_tool_is_not_exposed(capsys: pytest.CaptureFixture[str]) -> None:
         runtime_tools.main(["wiki-query", "--request", "scratch/query.json"])
     assert error.value.code == 2
     assert "invalid choice" in capsys.readouterr().err
-    assert runtime_tools.tool_request_schema("wiki-query") is None
+    assert runtime_tools.tool_request_schema("wiki-query") is not None
     with pytest.raises(SystemExit) as help_result:
         runtime_tools.main(["--help"])
     assert help_result.value.code == 0

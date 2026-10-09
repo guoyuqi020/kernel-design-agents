@@ -12,6 +12,7 @@ from tool_contracts import tool_request_schema
 _CONTRACT_ENV = "ATREX_RUNTIME_CONTRACT_PATH"
 _FILES = ("tools.json", "environment.json", "limits.json")
 _LOCAL_COMMANDS = (
+    "wiki-query",
     "kernel-artifact-read",
     "result-artifact-read",
     "kernel-pareto-frontier",
@@ -56,6 +57,24 @@ def load_live_contract() -> tuple[Path, dict[str, Any]]:
         name.removesuffix(".json"): _object_file(root / name, f"Runtime contract {name}")
         for name in _FILES
     }
+
+
+def wiki_enabled(live: dict[str, Any] | None = None) -> bool:
+    """Enable Wiki only when the Runtime explicitly supplies its service and binding."""
+    if live is None:
+        if not os.environ.get(_CONTRACT_ENV):
+            return False
+        _, live = load_live_contract()
+    services = live["environment"].get("services")
+    bindings = live["tools"].get("bindings")
+    if not isinstance(services, dict) or services.get("wiki") is not True:
+        return False
+    binding = bindings.get("wiki-query") if isinstance(bindings, dict) else None
+    return (
+        isinstance(binding, dict)
+        and binding.get("kind") == "runtime-query"
+        and binding.get("operation") == "wiki_query"
+    )
 
 
 def project_contract(
@@ -103,6 +122,8 @@ def project_contract(
     for name in _LOCAL_COMMANDS:
         if name not in bindings:
             continue
+        if name == "wiki-query" and not wiki_enabled(live):
+            raise ValueError("Runtime Wiki binding requires the enabled Wiki service")
         schema = tool_request_schema(
             name,
             allow_baseline=allow_baseline,

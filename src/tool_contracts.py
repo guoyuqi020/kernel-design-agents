@@ -311,6 +311,23 @@ def _experiment_schema(*, allow_baseline: bool, directions_enabled: bool = True)
     if not directions_enabled:
         schema["properties"].pop("direction_id")
         schema["required"].remove("direction_id")
+    schema["properties"]["knowledge_used"] = {
+        "type": "array",
+        "default": [],
+        "items": _object(
+            {
+                field: {**_text(), "pattern": r"\S"}
+                for field in ("record_id", "finding", "application")
+            }
+        ),
+        "description": (
+            "Optional knowledge materially used in this Experiment. Cite exact returned Record IDs "
+            "from Wiki results or visible history, the relevant finding, and how it informed the "
+            "change or decision. Empty or omitted means none declared. This is an Agent "
+            "declaration, not proof of adoption, correctness, or performance benefit; "
+            "no new Wiki query is required."
+        ),
+    }
     schema["allOf"] = [
         {
             "anyOf": [
@@ -440,6 +457,14 @@ def _attempt_report_schema(
 
 _SCRATCH_FILE = _object({"file": {"type": "string", "pattern": r"^scratch/.+"}})
 _SCHEMAS: dict[str, dict[str, Any]] = {
+    "wiki-query": {
+        **_object({"query": {**_text(), "pattern": r"\S"}}),
+        "description": (
+            "Ask one focused GPU optimization knowledge question. Runtime supplies trusted "
+            "operator, hardware and DSL scope. Historical records are research leads, not "
+            "evidence for the current Kernel; validate adopted advice with Runtime tools."
+        ),
+    },
     "kernel-artifact-read": _object(
         {
             "kernel_artifact_digest": _digest(),
@@ -470,7 +495,8 @@ _SCHEMAS: dict[str, dict[str, Any]] = {
         **_SCRATCH_FILE,
         "description": (
             "Find visible experiments and their recorded hypothesis, change, evidence, analysis, "
-            "and action. Writes the index to file; returns only status/file/count. Load selected "
+            "action, and declared knowledge_used. Writes the index to file; returns only "
+            "status/file/count. Load selected "
             "records only when more detail or exact Artifact bindings are needed."
         ),
     },
@@ -512,6 +538,14 @@ def tool_request_schema(
 
 
 _RECOVERY: dict[str, list[dict[str, Any]]] = {
+    "wiki-query": [
+        {
+            "instruction": (
+                "Supply only a nonblank query string. Do not include credentials, endpoint, "
+                "attempt identity, scope, schema version, or idempotency key."
+            )
+        }
+    ],
     "kernel-artifact-read": [
         {
             "instruction": (
@@ -655,6 +689,17 @@ def tool_recovery(
     """Return bounded, visibility-safe next actions for repairing one local request."""
     if command == "gateway-execute" and operation == "evaluate":
         return _evaluate_recovery(detail)
+    if command == "record-experiment" and "knowledge_used" in detail:
+        return [
+            {
+                "instruction": (
+                    "Omit knowledge_used or use [] when no knowledge was used. Otherwise provide "
+                    "an array with exactly record_id, finding, and application as nonblank "
+                    "strings in each entry. Cite exact Record IDs already returned by Wiki or "
+                    "visible history; no new query is required."
+                )
+            }
+        ]
     if command == "record-experiment" and not directions_enabled:
         return [
             {
@@ -834,7 +879,7 @@ def local_validation_issue(detail: str) -> dict[str, str]:
         return {"path": evaluate_field.group(1), "code": code, "message": detail}
     path = "$"
     structured_path = re.search(
-        r"Attempt report ([A-Za-z_][A-Za-z0-9_.\[\]]*)",
+        r"(?:Attempt report|Experiment(?= knowledge_used)) ([A-Za-z_][A-Za-z0-9_.\[\]]*)",
         detail,
     )
     if structured_path is not None:

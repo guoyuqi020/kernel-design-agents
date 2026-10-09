@@ -377,7 +377,7 @@ previous closure. A merely `proposed` Direction must still be started first.
 Late recording uses the same Trial visibility, ownership, and evidence checks as ordinary recording.
 Use it to complete the Journal before terminal handoff, not to resume research without `start`.
 
-Each `record-experiment` request must contain exactly these fields:
+Each `record-experiment` request contains these required fields; `knowledge_used` is optional:
 
 ```json
 {
@@ -389,9 +389,21 @@ Each `record-experiment` request must contain exactly these fields:
   "after": {"result_artifact_digest": "sha256:<after-trial>"},
   "evidence": "concise before/after measurements and observations",
   "analysis": "what the evidence means, including whether the hypothesis held",
-  "action": "keep_after"
+  "action": "keep_after",
+  "knowledge_used": [{
+    "record_id": "exact Record ID returned by Wiki or visible history",
+    "finding": "the relevant advice or constraint",
+    "application": "how it informed this candidate change or decision"
+  }]
 }
 ```
+
+Declare only knowledge that materially informed this Experiment in `knowledge_used`, using exact
+returned Record IDs. Every entry has nonblank `record_id`, `finding`, and `application` strings and
+no additional fields. Omit the field or use `[]` when none was used. A record from visible history
+may be cited even when Wiki is disabled; do not issue a new query merely to populate this field.
+This records the Agent's declaration, not proof of adoption, correctness, or performance benefit.
+Runtime measurements remain the evidence for the current Kernel.
 
 `before` and `after` identify both measured sides using only their Result Artifact digests. Runtime resolves
 and freezes the selected Result Artifact and its exact Kernel Artifact when it records the

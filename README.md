@@ -72,6 +72,22 @@ Home, not global settings.
 
 Direction and Experiment history and Gateway results live in Runtime storage and are accessed through the supplied tools. Submit the terminal report with `attempt-report`; local `benchmark.csv` or `candidates.jsonl` files are not required handoff artifacts. The repository's engineering `docs/` directory is not reusable State.
 
+GPU Wiki is optional and disabled by default. Enable it in the Runtime task configuration with
+`gpu_wiki.enabled: true` and a configured knowledge service. Runtime then adds `wiki-query` to the
+live tool contract and supplies scoped authority for Bootstrap and optimization. The Agent writes
+`{"query":"<focused knowledge question>"}` under `scratch/` and calls
+`python3 agent/optimizer/src/runtime_tools.py wiki-query --request scratch/wiki-query.json`.
+Disabling Wiki removes its command, discovery entry, and injected guidance; Direction and Experiment
+module switches are independent. Historical Wiki recommendations still require validation for the
+current Kernel and never replace required Evaluate evidence.
+
+`record-experiment` optionally accepts `knowledge_used`, an array of objects containing exactly
+`record_id`, `finding`, and `application` as nonblank strings. Cite only knowledge that materially
+informed that Experiment, using an exact Record ID returned by Wiki or already present in visible
+history. Omitted values and older records are read as `[]`; no additional Wiki query is required,
+and historical citations remain valid to declare when Wiki is disabled. This is an Agent declaration,
+not proof that a cited recommendation was adopted, correct, or beneficial.
+
 ## Claude usage accounting
 
 Native main/child transcripts are captured separately under `sessions/core/provider/`.

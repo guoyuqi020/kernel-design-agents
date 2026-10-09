@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import os
 
-from runtime_contract import load_live_contract
+from runtime_contract import load_live_contract, wiki_enabled
 
 _DEFAULT = frozenset({"directions", "experiments"})
 _RUNTIME_TOOL = "agent/optimizer/src/runtime_tools.py"
@@ -125,6 +125,8 @@ def modular_tool_instructions(template: str, dsl: str, modules: frozenset[str]) 
             "find-kernel-experiments",
         ]
     commands.append("attempt-report")
+    if wiki_enabled():
+        commands.append("wiki-query")
     available = ", ".join(f"`{command}`" for command in commands)
     directions = (
         "Read relevant history before choosing a hypothesis; those queries require no new Direction. "
@@ -161,6 +163,11 @@ def modular_tool_instructions(template: str, dsl: str, modules: frozenset[str]) 
         "Artifact bindings or other full-record details. For a known Kernel digest, `find-kernel-experiments` "
         'takes {"kernel_artifact_digest":"sha256:<digest>"} and returns visible experiment_ids. '
         "Record each meaningful measured candidate decision with record-experiment. "
+        "Optional knowledge_used defaults to []; each entry has exactly nonblank record_id, finding, "
+        "and application strings. Cite an exact returned Wiki Record ID or one from visible history, "
+        "and explain how that knowledge informed this change or decision. This is an Agent declaration, "
+        "not proof of adoption, correctness, or performance benefit. Leave it empty when none was used; "
+        "do not query Wiki merely to populate it, including when Wiki is disabled. "
         "Cite real Kernel-bound Result Artifacts: keep_after, restore_before, and adopt require "
         "both before and after; abandon_direction permits one null side, but not both; "
         "Bootstrap baseline requires before=null and a measured after. "

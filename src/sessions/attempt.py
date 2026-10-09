@@ -18,6 +18,7 @@ from .tool_module_prompts import (
     modular_tool_instructions,
     modular_workflow,
 )
+from .wiki_prompt import with_wiki_instructions
 
 _RUNTIME_TOOL = "agent/optimizer/src/runtime_tools.py"
 _TEMPLATE_PLACEHOLDER = re.compile(r"\{\{([^{}\n]+)\}\}")
@@ -44,14 +45,16 @@ def _tool_instructions(config: AgentConfig, dsl: str) -> str:
     modules = active_modules()
     template = config.prompt_fragment_path("attempt_tools").read_text(encoding="utf-8")
     if modules != frozenset({"directions", "experiments"}):
-        return modular_tool_instructions(template, dsl, modules)
-    return _render_prompt_fragment(
-        template,
-        {
-            "DSL": dsl,
-            "RUNTIME_TOOL": _RUNTIME_TOOL,
-        },
-    )
+        rendered = modular_tool_instructions(template, dsl, modules)
+    else:
+        rendered = _render_prompt_fragment(
+            template,
+            {
+                "DSL": dsl,
+                "RUNTIME_TOOL": _RUNTIME_TOOL,
+            },
+        )
+    return with_wiki_instructions(rendered)
 
 
 def _session_instructions(config: AgentConfig, dsl: str) -> str:
