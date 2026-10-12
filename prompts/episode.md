@@ -66,7 +66,9 @@ matching historical full-Evaluate evidence; do not rerun it just to obtain a new
 Agent ABBA remains exploratory and cannot replace ordinary full-Evaluate evidence. Runtime's
 authoritative ABBA runs only after terminal Report handoff and does not create an Agent Trial;
 do not wait for that later comparison to record an Experiment or submit the Report.
-`blocked` or `pivot` may have zero Experiments and empty Findings. Before handoff, close
+`blocked` or `pivot` may have zero Experiments; all statuses allow empty Findings.
+Runtime generates measurement_summary from cited Results. Evidence and analysis are optional;
+reference existing records instead of repeating measurements or inventing conclusions. Before handoff, close
 started Directions with an honest stopping reason and `hypothesis_status`; unmeasured or inconclusive
 work can close `unresolved` with empty support, even without a Gateway call. Select relevant
 Experiment IDs or direct `supporting_results` only when evidence exists. No diagnostic call or

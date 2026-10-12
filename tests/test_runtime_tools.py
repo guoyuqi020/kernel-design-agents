@@ -828,7 +828,11 @@ def test_cli_local_validation_adds_schema_and_recovery(
             ),
         }
     ]
-    assert set(response["request_schema"]["required"]) == runtime_tools._EXPERIMENT_FIELDS
+    assert set(response["request_schema"]["required"]) == runtime_tools._EXPERIMENT_FIELDS - {
+        "hypothesis",
+        "evidence",
+        "analysis",
+    }
     assert response["recovery"][0] == {
         "tool": "list-directions",
         "request": {"file": "scratch/directions-index.json"},
